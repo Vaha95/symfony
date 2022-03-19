@@ -3,50 +3,119 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 class User
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $lastname;
+    private $firstName;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $firstname;
+    private $lastName;
+
+    #[ORM\ManyToMany(targetEntity: Chat::class, mappedBy: 'users')]
+    private $chats;
+
+    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Message::class, orphanRemoval: true)]
+    private $messages;
+
+    public function __construct()
+    {
+        $this->chats = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLastname(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->lastname;
+        return $this->firstName;
     }
 
-    public function setLastname(string $lastname): self
+    public function setFirstName(string $firstName): self
     {
-        $this->lastname = $lastname;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
-    public function getFirstname(): ?string
+    public function getLastName(): ?string
     {
-        return $this->firstname;
+        return $this->lastName;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setLastName(string $lastName): self
     {
-        $this->firstname = $firstname;
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Chat>
+     */
+    public function getChats(): Collection
+    {
+        return $this->chats;
+    }
+
+    public function addChat(Chat $chat): self
+    {
+        if (!$this->chats->contains($chat)) {
+            $this->chats[] = $chat;
+            $chat->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChat(Chat $chat): self
+    {
+        if ($this->chats->removeElement($chat)) {
+            $chat->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getSender() === $this) {
+                $message->setSender(null);
+            }
+        }
 
         return $this;
     }
