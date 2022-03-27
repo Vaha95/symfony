@@ -2,7 +2,7 @@ version: "3.4"
 
 # Development environment override
 services:
-  php:
+  api:
     volumes:
       # The "cached" option has no effect on Linux but improves performance on Mac
       - ./:/srv/app:rw,cached
