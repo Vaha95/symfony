@@ -16,15 +16,7 @@ jobs:
             - name: Start services
               run: docker-compose up --build -d
             - name: Wait for services
-              run: |
-                  while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q api)")"; do
-                    case $status in
-                      starting) sleep 1;;
-                      healthy) exit 0;;
-                      unhealthy) exit 1;;
-                    esac
-                  done
-                  exit 1
+              run: sleep 15
             - name: Check HTTP reachability
               run: curl http://localhost
             - name: Check HTTPS reachability
