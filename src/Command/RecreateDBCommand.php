@@ -13,8 +13,10 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Recreate db schema.',
     hidden: false
 )]
-class RecreateDBCommand extends Command {
-    protected function execute(InputInterface $input, OutputInterface $output): int {
+class RecreateDBCommand extends Command
+{
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $commands = [
             ['name' => 'doctrine:schema:drop', 'args' => ['--force' => true]],
             ['name' => 'doctrine:schema:update', 'args' => ['--force' => true]],

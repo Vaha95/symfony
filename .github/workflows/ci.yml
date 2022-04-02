@@ -17,6 +17,8 @@ jobs:
               run: docker-compose up --build -d
             - name: Wait for services
               run: sleep 15
+            - name: check syntax
+              run: docker-compose exec -T symfony vendor/bin/php-cs-fixer fix src --diff --dry-run -v --allow-risky=yes
             - name: Check HTTP reachability
               run: curl http://localhost
             - name: Check HTTPS reachability

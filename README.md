@@ -15,3 +15,9 @@ A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony
 ```bash
 docker-compose exec symfony bin/console app:db:schema:recreate
 ```
+
+## Check syntax
+
+```bash
+docker-compose exec symfony vendor/bin/php-cs-fixer fix src --diff --dry-run -v --allow-risky=yes
+```
