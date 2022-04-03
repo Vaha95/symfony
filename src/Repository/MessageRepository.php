@@ -4,8 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Message;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,8 +20,8 @@ class MessageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @param Message $entity
+     * @param bool    $flush
      */
     public function add(Message $entity, bool $flush = true): void
     {
@@ -34,8 +32,8 @@ class MessageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @param Message $entity
+     * @param bool    $flush
      */
     public function remove(Message $entity, bool $flush = true): void
     {
