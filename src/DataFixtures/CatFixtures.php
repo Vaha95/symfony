@@ -49,7 +49,7 @@ class CatFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies(): array
     {
-        // Указываем от каких Фиктур зависит данный класс
+        // Указываем от каких фикстур зависит данный класс
         return [
             BreedFixtures::class,
         ];
